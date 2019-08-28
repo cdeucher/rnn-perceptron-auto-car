@@ -4,6 +4,8 @@ var Interval;
 var platforms;
 var stars;
 var betters;
+var graphics;
+var line;
 
 function start_genome(self){
     console.log('start_genome')
@@ -25,9 +27,10 @@ function start_genome(self){
     console.log('end  ',listPlayers)          
 
     for (let i=0; i < 30; i++){
-        if(i < 1)
-            listPlayers[i] = create_player(self, MAX_P, platforms, stars , betters[0]); 
-        else
+        if(betters[i] != undefined){
+            //console.log('betters',i, betters[i])
+            listPlayers[i] = create_player(self, MAX_P, platforms, stars , betters[i]); 
+        }else
             listPlayers[i] = create_player(self, MAX_P, platforms, stars);             
     }
     //setTimeout(() => { start_genome(self) }, 15000)    
@@ -39,6 +42,11 @@ function get_min_max(){
     let max = 10
     let min = -10  
     return Math.floor(Math.random() * (max - min + 1)) + min
+}
+function get_weight(){
+    let max = parseFloat((Math.random())) //.toFixed(3))
+    let min = parseFloat((Math.random() -1)) //.toFixed(3))
+    return (Math.random() >= 0.5) ? max : min 
 }
 function create_player(self,i,platforms,stars, rnn=undefined){   
     let player = self.physics.add.sprite(100+get_min_max(), 450+get_min_max(), 'dude');
@@ -55,7 +63,10 @@ function create_player(self,i,platforms,stars, rnn=undefined){
     if(rnn != undefined){
         player.rnn = new network( player, rnn.weights1, rnn.weights2 )
     }else{
-        $.ajax({ 
+        player.weights1 =  [get_weight(),get_weight(),get_weight(),get_weight()]
+        player.weights2 =  [get_weight(),get_weight(),get_weight(),get_weight()]
+        player.rnn = new network( player, player.weights1, player.weights2 )        
+        /*$.ajax({ 
             url:"/weights/4/4",
             type: "POST"
         , success:( data ) => {
@@ -65,7 +76,7 @@ function create_player(self,i,platforms,stars, rnn=undefined){
             player.weights2 =  play.weights2
             player.rnn = new network( player, player.weights1, player.weights2 )
         }
-        }) 
+        })*/ 
     }         
 
     return player;
@@ -81,9 +92,13 @@ function create (){
     this.add.image(400, 300, 'sky');
     platforms = this.physics.add.staticGroup();
     platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-    platforms.create(600, 400, 'ground');
-    platforms.create(50, 250, 'ground');
+    //platforms.create(600, 400, 'ground');
+    platforms.create(50, 300, 'ground');
     platforms.create(750, 220, 'ground');
+
+    graphics = this.add.graphics({ lineStyle: { width: 4, color: 0xaa00aa } });
+    line  = new Phaser.Geom.Line(250, 300, 250, 600);
+    line2 = new Phaser.Geom.Line(550, 220, 550, 600);
 
     stars = this.physics.add.group({key: 'star',repeat: 11,setXY: { x: 12, y: 0, stepX: 70 }});
     stars.children.iterate(function (child) {
@@ -122,7 +137,12 @@ function create (){
        }
     })         
 }
-function update(){
+function update(){    
+    graphics.clear();
+    graphics.strokeLineShape(line);  
+    graphics.strokeLineShape(line2);  
+
+
     listPlayers.forEach( (item, index)=> {  
         var player = item;  
         player.count_update++  
@@ -172,7 +192,7 @@ var config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 300 },
-            debug: true
+            debug: false
         }
     },
     scene: {

@@ -11,11 +11,11 @@ class network{
       this.weights2   = weights2
   }
   update(){     
-     let plataforma = 220; 
-     if(this.player.y >= 219 && this.player.y <= 399)
-        plataforma = 250
-     if(this.player.y > 400) 
-        plataforma = 400  
+     let plataforma = 900; 
+     if(this.player.y > 350 && this.player.x < 250)
+        plataforma = 200; 
+     if(this.player.y > 270 && this.player.x > 550)
+        plataforma = 500;       
 
       $.ajax({ 
          url:"/get",
@@ -35,6 +35,7 @@ class network{
 
             this.player.max = this.play.run.indexOf(max);
             //console.log(this.index, this.player.max, this.play.run[this.player.max])
+            console.log(this.index, this.player.x, this.player.y, plataforma) 
         }
       })  
      //console.log('player.max',this.player.max)     
