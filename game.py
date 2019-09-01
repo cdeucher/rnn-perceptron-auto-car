@@ -12,7 +12,7 @@ SCREEN_HEIGHT = 600
 SCREEN_TITLE = "Sprite Move with Walls Example"
 
 MOVEMENT_SPEED = 5
-
+MAX = 200
 
 class MyGame(arcade.Window):
     """ Main application class. """
@@ -31,6 +31,7 @@ class MyGame(arcade.Window):
         self.player_list = None
         self.score = 0
         self.score_timeout = 0
+        self.generations = 0
 
         # Set up the player
         self.player_sprite = None
@@ -43,25 +44,7 @@ class MyGame(arcade.Window):
         self.genoma_list = []
         self.better = None
 
-    def mutate(self, player, better):
-        count = 0
-        for i in range( len(player.weights1) ): 
-           if random.uniform(0, 1) < 0.2:
-                player.weights1[i] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1
-                count += 1
-           else:
-                player.weights2[i] = better.weights2[i]    
-
-        for i in range( len(player.weights2) ): 
-           if random.uniform(0, 1) < 0.2:
-                player.weights2[i] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1                    
-                count += 1
-           else:
-                player.weights2[i] = better.weights2[i]  
-        #print('mutations',count)
-        return  player.weights1, player.weights2
-
-    def genoma(self):
+    def get_better(self):
         self.genoma_list = []
         if self.better == None:
             self.better = self.player_list[0]
@@ -71,39 +54,52 @@ class MyGame(arcade.Window):
             if( self.better.position[1] < self.player_list[i].position[1]):
                 print('better',self.better.position[1], self.player_list[i].position[1] )
                 self.better = self.player_list[i]
-         
- 
-        for i in range( len(self.player_list) ):
-            weights1, weights2 = self.better.weights1, self.better.weights2          
 
-            if random.uniform(0, 1) < 0.8:
-                #print(i,'mutate')
-                weights1, weights2 = self.mutate( self.player_list[i], self.better ) 
+    def mutate(self, player):
+        count = 0
+        for i in range( len(player.weights1) ): 
+           if random.uniform(0, 1) < 0.2 or self.better == None:
+                player.weights1[i] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1
+                count += 1
+           else:
+                player.weights2[i] = self.better.weights2[i]    
 
-            self.genoma_list.append([weights1, weights2])
+        for i in range( len(player.weights2) ): 
+           if random.uniform(0, 1) < 0.2  or self.better == None:
+                player.weights2[i] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1                    
+                count += 1
+           else:
+                player.weights2[i] = self.better.weights2[i]  
+        #print('mutations',count)
+        return  player.weights1, player.weights2
 
-        #print('genoma_list',self.genoma_list)            
+    def genoma(self, player):
+        self.genoma_list = []
+        #for i in range( len(self.player_list) ):
+        #    weights1, weights2 = self.better.weights1, self.better.weights2          
+        if random.uniform(0, 1) < 0.8:
+            weights1, weights2 = self.mutate( player ) 
+            return weights1, weights2, True
+        else:
+            if(self.better == None):
+                return 0, 0, False
+            else:    
+                return self.better.weights1, self.better.weights2, True 
 
 
-    def startnewgame(self):        
-        for x in range(200):
+    def startnewgame(self):
+        print('------------------startnewgame----------------') 
+        self.generations += 1
+        for x in range( MAX ):
             self.player_sprite = arcade.Sprite("images/ballon3.png",SPRITE_SCALING)
             self.player_sprite.center_x = 150 + random.uniform(1,50)
             self.player_sprite.center_y = 100
-
-            try:
-                #print(x, self.genoma_list[x][0])
-                #if x > 7100 :
-                #    self.player_sprite.weights1 = 2 * random.random((3, 4)) - 1
-                #    self.player_sprite.weights2 = 2 * random.random((4, 4)) - 1
-                #else:    
-                print( self.genoma_list[x][0] )
-                self.player_sprite.weights1 = self.genoma_list[x][0]
-                self.player_sprite.weights2 = self.genoma_list[x][1] 
-                #print(x,'copy')               
-            except IndexError:
-                self.player_sprite.weights1 = 2 * random.random((3, 4)) - 1
-                self.player_sprite.weights2 = 2 * random.random((4, 4)) - 1
+            self.player_sprite.weights1 = 2 * random.random((3, 4)) - 1
+            self.player_sprite.weights2 = 2 * random.random((4, 4)) - 1                    
+            mutation1, mutation2, mutate = self.genoma(self.player_sprite)
+            if( mutate ):
+                self.player_sprite.weights1 = mutation1
+                self.player_sprite.weights2 = mutation2            
 
             self.player_list.append(self.player_sprite)
 
@@ -151,6 +147,12 @@ class MyGame(arcade.Window):
             wall.center_y = 500
             self.wall_list.append(wall)
 
+        for x in range(2):
+            wall = arcade.Sprite("images/platform.png", SPRITE_SCALING)
+            wall.center_x = 200+(x*200)
+            wall.center_y = 400
+            self.wall_list.append(wall)
+
         for x in range(40):
             wall = arcade.Sprite("images/platform.png", SPRITE_SCALING)
             wall.center_x = 880
@@ -178,8 +180,10 @@ class MyGame(arcade.Window):
         self.player_list.draw()
 
         # score
-        score_text = f"Score: {self.score}"
+        score_text = f"Time: {self.score}"
         arcade.draw_text(score_text, 50, 570,arcade.csscolor.WHITE, 10)
+        generations_text = f"Generations: {self.generations}"
+        arcade.draw_text(generations_text, 50, 560,arcade.csscolor.WHITE, 10)        
 
 
     def on_key_press(self, key, modifiers):
@@ -205,15 +209,15 @@ class MyGame(arcade.Window):
     def update(self, delta_time):
         self.score_timeout += delta_time
         self.score = int(self.score_timeout) % 60
-
+        
         # See if we hit any coins
         for player in self.player_list:    
             player.physics.update() 
             
-            if(player.position[1] <= 198):
-                plataform = 198
-            elif(player.position[1] <= 498):
-                plataform = 498   
+            if(player.position[1] > 200):
+                plataform = 200
+            elif(player.position[1] > 400):
+                plataform = 400   
             else:    
                 plataform = 698   
 
@@ -229,7 +233,7 @@ class MyGame(arcade.Window):
             self.score_timeout = 0
 
             print('start genoma')
-            self.genoma() 
+            self.get_better()            
             print('end genoma')
             
             while len(self.player_list) > 0:
