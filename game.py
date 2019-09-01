@@ -59,7 +59,7 @@ class MyGame(arcade.Window):
         count = 0
         for i in range( len(player.weights1) ): 
             for x in range( len(player.weights1[i]) ):
-                if random.uniform(0, 1) < 0.8 or self.better == None:
+                if random.uniform(0, 1) < 0.3 or self.better == None:
                         player.weights1[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1
                         count += 1
                 else:
@@ -68,7 +68,7 @@ class MyGame(arcade.Window):
         for i in range( len(player.weights2) ): 
             for x in range( len(player.weights2[i]) ):
                 #print(player.weights2[i][x])
-                if random.uniform(0, 1) < 0.8  or self.better == None:
+                if random.uniform(0, 1) < 0.3  or self.better == None:
                         player.weights2[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1                    
                         count += 1
                 else:
