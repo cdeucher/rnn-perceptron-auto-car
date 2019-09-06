@@ -7,10 +7,18 @@ import network as rnn
 SPRITE_SCALING = 0.5
 GRAVITY = 0.1
 
-SCREEN_WIDTH = 800
-SCREEN_HEIGHT = 600
 SCREEN_TITLE = "RNN + Genetic algorithm"
 
+# GRIDE
+ROW_COUNT = 30
+COLUMN_COUNT = 30
+WIDTH = 30
+HEIGHT = 30
+MARGIN = 0
+SCREEN_WIDTH = (WIDTH + MARGIN) * COLUMN_COUNT + MARGIN
+SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
+
+#ROBOTs
 MOVEMENT_SPEED = 5
 MAX = 200
 
@@ -37,12 +45,48 @@ class MyGame(arcade.Window):
         self.player_sprite = None
         self.physics_engine = None
 
-        # Create layer 1/2 (3 neurons, each with 3 inputs)
-        self.layer1 = rnn.NeuronLayer(3, 4)
+        # Create layer 1/2 (4 neurons, each with 6 inputs)
+        self.layer1 = rnn.NeuronLayer(6, 4)
         self.layer2 = rnn.NeuronLayer(4, 4)
         self.perceptron = rnn.NeuralNetwork(self.layer1, self.layer2)
         self.genoma_list = []
         self.better = None
+
+        #GRIDE
+        #http://arcade.academy/examples/array_backed_grid.html#array-backed-grid
+        #self.grid = np.zeros([ROW_COUNT, COLUMN_COUNT])
+        #print(self.grid)
+        self.grid =  [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                      [1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]            
+
 
     def get_better(self):
         self.genoma_list = []
@@ -59,21 +103,21 @@ class MyGame(arcade.Window):
         count = 0
         for i in range( len(player.weights1) ): 
             for x in range( len(player.weights1[i]) ):
-                if random.uniform(0, 1) < 0.3 or self.better == None:
+                if random.uniform(0, 1) < 0.8 or self.better == None:
                         player.weights1[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1
                         count += 1
                 else:
-                        player.weights2[i] = self.better.weights2[i]    
+                        player.weights1[i] = self.better.weights1[i]    
 
         for i in range( len(player.weights2) ): 
             for x in range( len(player.weights2[i]) ):
                 #print(player.weights2[i][x])
-                if random.uniform(0, 1) < 0.3  or self.better == None:
+                if random.uniform(0, 1) < 0.8  or self.better == None:
                         player.weights2[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1                    
                         count += 1
                 else:
                         player.weights2[i] = self.better.weights2[i]  
-        print('mutations',self.generations, count)
+        #print('mutations',self.generations, count)
         return  player.weights1, player.weights2
 
     def genoma(self, player):
@@ -97,7 +141,7 @@ class MyGame(arcade.Window):
             self.player_sprite = arcade.Sprite("images/ballon3.png",SPRITE_SCALING)
             self.player_sprite.center_x = 150 + random.uniform(1,50)
             self.player_sprite.center_y = 100
-            self.player_sprite.weights1 = 2 * random.random((3, 4)) - 1
+            self.player_sprite.weights1 = 2 * random.random((6, 4)) - 1
             self.player_sprite.weights2 = 2 * random.random((4, 4)) - 1                    
             mutation1, mutation2, mutate = self.genoma(self.player_sprite)
             if( mutate ):
@@ -129,44 +173,19 @@ class MyGame(arcade.Window):
 
         # Sprite lists
         self.player_list = arcade.SpriteList()
-        self.wall_list = arcade.SpriteList()
+        self.wall_list = arcade.SpriteList()                   
 
-        # -- Set up the walls
-        for x in range(10):
-            wall = arcade.Sprite("images/platform.png", SPRITE_SCALING)
-            wall.center_x = x*200
-            wall.center_y = 2
-            self.wall_list.append(wall)
-
-        for x in range(2):
-            wall = arcade.Sprite("images/platform.png", SPRITE_SCALING)
-            wall.center_x = x*200
-            wall.center_y = 200
-            self.wall_list.append(wall)
-
-        for x in range(4):
-            wall = arcade.Sprite("images/platform.png", SPRITE_SCALING)
-            wall.center_x = 200+(x*200)
-            wall.center_y = 500
-            self.wall_list.append(wall)
-
-        for x in range(2):
-            wall = arcade.Sprite("images/platform.png", SPRITE_SCALING)
-            wall.center_x = 200+(x*200)
-            wall.center_y = 400
-            self.wall_list.append(wall)
-
-        for x in range(40):
-            wall = arcade.Sprite("images/platform.png", SPRITE_SCALING)
-            wall.center_x = 880
-            wall.center_y = 15*(x)
-            self.wall_list.append(wall)    
-
-        for x in range(40):
-            wall = arcade.Sprite("images/platform.png", SPRITE_SCALING)
-            wall.center_x = -80
-            wall.center_y = 15*(x)
-            self.wall_list.append(wall)                      
+        # Draw the grid
+        for row in range(ROW_COUNT):
+            for column in range(COLUMN_COUNT):
+                x = (MARGIN + WIDTH) * column + MARGIN + WIDTH // 2
+                y = (MARGIN + HEIGHT) * row + MARGIN + HEIGHT // 2
+                # Draw the box
+                if self.grid[row][column] == 1:
+                    wall = arcade.Sprite("images/platform2.png", SPRITE_SCALING)
+                    wall.center_x = x
+                    wall.center_y = y
+                    self.wall_list.append(wall)                        
 
         # Set up the player
         self.startnewgame()
@@ -189,26 +208,6 @@ class MyGame(arcade.Window):
         arcade.draw_text(generations_text, 50, 560,arcade.csscolor.WHITE, 10)        
 
 
-    def on_key_press(self, key, modifiers):
-        """Called whenever a key is pressed. """
-
-        if key == arcade.key.UP:
-            self.player_sprite.change_y = MOVEMENT_SPEED
-        elif key == arcade.key.DOWN:
-            self.player_sprite.change_y = -MOVEMENT_SPEED
-        elif key == arcade.key.LEFT:
-            self.player_sprite.change_x = -MOVEMENT_SPEED
-        elif key == arcade.key.RIGHT:
-            self.player_sprite.change_x = MOVEMENT_SPEED
-
-    def on_key_release(self, key, modifiers):
-        """Called when the user releases a key. """
-
-        if key == arcade.key.UP or key == arcade.key.DOWN:
-            self.player_sprite.change_y = 0
-        elif key == arcade.key.LEFT or key == arcade.key.RIGHT:
-            self.player_sprite.change_x = 0
-
     def update(self, delta_time):
         self.score_timeout += delta_time
         self.score = int(self.score_timeout) % 60
@@ -217,14 +216,22 @@ class MyGame(arcade.Window):
         for player in self.player_list:    
             player.physics.update() 
             
-            if(player.position[1] > 200):
-                plataform = 200
-            elif(player.position[1] > 400):
-                plataform = 400   
-            else:    
-                plataform = 698   
+            DIST = 10
+            DIST2 = 50
+            yy1 = int(np.around( ( (player.position[1]+DIST) )/COLUMN_COUNT ))
+            yy2 = int(np.around( ( (player.position[1]-DIST2) )/COLUMN_COUNT ))
+            xx1 = int(np.around( ( (player.position[0]+DIST) )/ROW_COUNT ))
+            xx2 = int(np.around( ( (player.position[0]-DIST2) )/ROW_COUNT )) 
 
-            hidden_state, output = self.perceptron.run([player.position[0], player.position[1], plataform], player.weights1, player.weights2) 
+            #print('yy,xx',yy1,'',xx1,'yy,xx',yy2,'',xx2)#, self.grid[ yy1 ][ xx1 ], self.grid[ yy1 ][ xx2 ] )     
+
+            #print( self.grid[ yy1 ][ xx1 ], self.grid[ yy2 ][ xx1 ] )  
+            #print( self.grid[ yy1 ][ xx2 ], self.grid[ yy2 ][ xx2 ] )
+
+            #QUAD = [ self.grid[ yy1 ][ xx1 ], self.grid[ yy2 ][ xx1 ], self.grid[ yy1 ][ xx2 ], self.grid[ yy2 ][ xx2 ] ]
+            #print(QUAD)            
+
+            hidden_state, output = self.perceptron.run([player.position[0], player.position[1],  self.grid[yy1][xx1], self.grid[yy2][xx1], self.grid[yy1][xx2], self.grid[yy2][xx2] ], player.weights1, player.weights2) 
             A = np.array(output)
             #H = np.array(hidden_state)
             #hidden = np.where(H==max(hidden_state))[0][0]
@@ -247,7 +254,6 @@ class MyGame(arcade.Window):
 
             print('startnewgame')  
             self.startnewgame()                       
-
 
 def main():
     """ Main method """
