@@ -27,7 +27,7 @@ SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 #ROBOTs
 MOVEMENT_SPEED = 10
 MAX = 200 if not DEBUG else 1
-MAX_TIME = 2
+MAX_TIME = 10
 
 class MyGame(arcade.Window):
     """ Main application class. """
@@ -81,13 +81,11 @@ class MyGame(arcade.Window):
             self.player_sprite.center_x = 150 + random.uniform(1,50)
             self.player_sprite.center_y = 100
             if count < len(self.player_tmp) :
-                print(count,'self.player_tmp[count]')
-                print(count,'2 gen', len( self.player_tmp[count].weights1[0] ), len( self.player_tmp[count].weights2[0] ) )
-                self.player_sprite.weights1 = 2 * random.random((6, 6)) - 1 #self.player_tmp[count].weights1
-                self.player_sprite.weights2 = 2 * random.random((6, 4)) - 1 #self.player_tmp[count].weights2
-            else:  
-                if self.better != None :
-                    print(count,'self.better',self.better.weights1,self.better.weights2)  
+                #print(count,'self.player_tmp[count]')
+                #print(count,'2 gen', len( self.player_tmp[count].weights1[0] ), len( self.player_tmp[count].weights2[0] ) )
+                self.player_sprite.weights1 = self.player_tmp[count].weights1
+                self.player_sprite.weights2 = self.player_tmp[count].weights2
+            else:   
                                             # 6 imputs, 6 neuro, 4 saidas
                 self.player_sprite.weights1 = 2 * random.random((6, 6)) - 1 if self.better == None else Util.copy(self.better.weights1)
                 self.player_sprite.weights2 = 2 * random.random((6, 4)) - 1 if self.better == None else Util.copy(self.better.weights2) 
