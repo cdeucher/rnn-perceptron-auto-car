@@ -9,6 +9,8 @@ import utils as U
 Util   = U.oUtil()
 Tool   = T.oTool()
 
+MAX = 200
+
 class copybetter:
     weights1 = []
     weights1 = []
@@ -50,38 +52,35 @@ class oGenome():
         for i in range( len(player.weights1) ): 
             for x in range( len(player.weights1[i]) ):
                 if random.uniform(0, 1) < 0.3 or better == None:
-                    if random.uniform(0, 1) > 0.3 and  better != None: #considerar o better no sorteio
-                        weights1[i][x] = random.uniform(0, 1) if better.weights1[i][x] > 0.1 else random.uniform(0, 1) -1
+                    if random.uniform(0, 1) < 0.5 and  better != None: #considerar o better no sorteio
+                        weights1[i][x] = better.weights1[i][x]   
                     else:    
                         weights1[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1
                     count += 1                            
                 else:
-                        weights1[i][x] = better.weights1[i][x]    
+                        weights1[i][x] = player.weights1[i][x]    
 
         for i in range( len(player.weights2) ): 
             for x in range( len(player.weights2[i]) ):
                 if random.uniform(0, 1) < 0.3  or better == None:
-                    if random.uniform(0, 1) > 0.3  and  better != None: #considerar o better no sorteio
-                        weights2[i][x] = random.uniform(0, 1) if better.weights2[i][x] > 0.1 else random.uniform(0, 1) -1                    
+                    if random.uniform(0, 1) < 0.3  and  better != None: #considerar o better no sorteio
+                        weights2[i][x] = better.weights2[i][x] 
                     else:    
                         weights2[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1                    
                     count += 1
                 else:                    
-                    weights2[i][x] = better.weights2[i][x] 
+                    weights2[i][x] = player.weights2[i][x] 
 
         #print('mutations', count)
         return  weights1, weights2
 
     def genome(self, player, better):        
-        if random.uniform(0, 1) < 0.9 :
+        if random.uniform(0, 1) < 0.5 :
             #print('genome',player.index)
             weights1, weights2 = self.mutate( player, better ) 
             return weights1, weights2, True
-        else:
-            if(better == None):
-                return 0, 0, False
-            else:    
-                return Util.copy(better.weights1), Util.copy(better.weights2), True
+        else:  
+            return Util.copy(player.weights1), Util.copy(player.weights2), True
 
     def crossover(self, player_list):
         count = 0
@@ -89,7 +88,7 @@ class oGenome():
         #start sort        
         arr   = sorted(player_list, key=lambda x: x.reward, reverse=True)
         for i in range(len(arr)) :
-            if arr[i].reward > 0 :
+            if arr[i].reward > 0 and len(self.genome_list) < MAX:
                 tmp = copybetter()
                 tmp.weights1 = arr[i].weights1
                 tmp.weights2 = arr[i].weights2
@@ -101,6 +100,7 @@ class oGenome():
                    print("Sorted : ", count, arr[i].reward)
                 else :
                    break
+        print('genome_list count:',len(self.genome_list))           
 
         #start crossover
         for x in range(len(self.genome_list)) :

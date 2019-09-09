@@ -6,9 +6,11 @@ import copy
 
 import network as rnn
 import utils as U
+import tools as T
 import genome as GE
 Util   = U.oUtil()
 Genome = GE.oGenome()
+Tool   = T.oTool()
 
 DEBUG = False
 SPRITE_SCALING = 0.5
@@ -28,6 +30,11 @@ SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 MOVEMENT_SPEED = 10
 MAX = 200 if not DEBUG else 1
 MAX_TIME = 10
+
+class copybetter:
+    weights1 = []
+    weights1 = []
+    reward = 0
 
 class MyGame(arcade.Window):
     """ Main application class. """
@@ -58,7 +65,12 @@ class MyGame(arcade.Window):
         self.layer2 = rnn.NeuronLayer(6, 4)
         self.perceptron = rnn.NeuralNetwork(self.layer1, self.layer2)
         self.genoma_list = []
-        self.better = None
+
+        self.better           = copybetter()       
+                                # 6 imputs, 6 neuro, 4 saidas               
+        self.better.weights1  = 2 * random.random((6, 6)) - 1 if len(Tool.read('better.weights1.txt')) <= 1 else Tool.read('better.weights1.txt')
+        self.better.weights2  = 2 * random.random((6, 4)) - 1 if len(Tool.read('better.weights2.txt')) <= 1 else Tool.read('better.weights2.txt')
+        self.better.reward    = 0 if len(Tool.read('better.reward.txt')) <= 1 else Tool.read('better.reward.txt')[0]
 
         #neuron
         self.better_count = 0
@@ -68,6 +80,30 @@ class MyGame(arcade.Window):
 
         self.grid   = Util.grid 
         self.reward = Util.reward          
+
+    def newgame(self):
+        print('------------------start----------------') 
+        self.generations += 1
+        count = 0
+        while len(self.player_list) < MAX:             
+            self.player_sprite = arcade.Sprite("images/ballon3.png",SPRITE_SCALING)
+            self.player_sprite.center_x = 150 + random.uniform(1,50)
+            self.player_sprite.center_y = 100 
+            self.player_sprite.weights1 = Util.copy(self.better.weights1)
+            self.player_sprite.weights2 = Util.copy(self.better.weights2) 
+            mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
+            if( mutate ):
+                old = self.player_sprite.weights1
+                self.player_sprite.weights1 = mutation1
+                self.player_sprite.weights2 = mutation2
+
+            self.player_sprite.reward   = 0
+            self.player_sprite.index    = random.uniform(0, 1)
+            self.player_sprite.physics  = arcade.PhysicsEnginePlatformer(self.player_sprite, self.wall_list, GRAVITY)                          
+            self.player_list.append(self.player_sprite) 
+            count += 1              
+        #end while    
+        print( 'new players',  len(self.player_list) )
 
     def startnewgame(self):
         print('------------------startnewgame----------------') 
@@ -80,27 +116,31 @@ class MyGame(arcade.Window):
             self.player_sprite = arcade.Sprite("images/ballon3.png",SPRITE_SCALING)
             self.player_sprite.center_x = 150 + random.uniform(1,50)
             self.player_sprite.center_y = 100
-            if count < len(self.player_tmp) :
+            #if count < len(self.player_tmp) :
                 #print(count,'self.player_tmp[count]')
                 #print(count,'2 gen', len( self.player_tmp[count].weights1[0] ), len( self.player_tmp[count].weights2[0] ) )
-                self.player_sprite.weights1 = self.player_tmp[count].weights1
-                self.player_sprite.weights2 = self.player_tmp[count].weights2
-            else:   
-                                            # 6 imputs, 6 neuro, 4 saidas
-                self.player_sprite.weights1 = 2 * random.random((6, 6)) - 1 if self.better == None else Util.copy(self.better.weights1)
-                self.player_sprite.weights2 = 2 * random.random((6, 4)) - 1 if self.better == None else Util.copy(self.better.weights2) 
-
-            self.player_sprite.reward   = 0
-            self.player_sprite.index    = random.uniform(0, 1)
-            self.player_sprite.physics  = arcade.PhysicsEnginePlatformer(self.player_sprite, self.wall_list, GRAVITY)                
+            self.player_sprite.weights1 = self.player_tmp[count].weights1
+            self.player_sprite.weights2 = self.player_tmp[count].weights2
             mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
             if( mutate ):
                 old = self.player_sprite.weights1
                 self.player_sprite.weights1 = mutation1
-                self.player_sprite.weights2 = mutation2
-                mutations += 1            
-                #diff befor / after mutation
-                #print(np.setdiff1d(old, self.player_sprite.weights1))            
+                self.player_sprite.weights2 = mutation2 
+                mutations += 1                
+            '''else:                                               
+                self.player_sprite.weights1 = Util.copy(self.better.weights1)
+                self.player_sprite.weights2 = Util.copy(self.better.weights2) 
+                mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
+                if( mutate ):
+                    old = self.player_sprite.weights1
+                    self.player_sprite.weights1 = mutation1
+                    self.player_sprite.weights2 = mutation2
+            '''                                       
+            #print(np.setdiff1d(old, self.player_sprite.weights1))                  
+
+            self.player_sprite.reward   = 0
+            self.player_sprite.index    = random.uniform(0, 1)
+            self.player_sprite.physics  = arcade.PhysicsEnginePlatformer(self.player_sprite, self.wall_list, GRAVITY)                          
 
             self.player_list.append(self.player_sprite) 
             count += 1              
@@ -130,7 +170,7 @@ class MyGame(arcade.Window):
                     self.wall_list.append(wall)                        
 
         # Set up the player
-        self.startnewgame()
+        self.newgame()
         # Set the background color
         arcade.set_background_color(arcade.color.AMAZON)
 
@@ -218,7 +258,12 @@ class MyGame(arcade.Window):
             print('start genoma - player_list:', len(self.player_list))
             self.better = Genome.get_better(self.better, self.player_list )   
             #apply crossover
-            self.genoma_list = Genome.crossover( self.player_list )                                 
+            self.genoma_list = []
+            self.genoma_list.append( self.better )
+            while len(self.genoma_list) < MAX and len(self.player_list) > 3 :
+                tmp = Genome.crossover( self.player_list )                                 
+                self.genoma_list.extend( tmp ) 
+
             print('end genoma - genoma_list:', len(self.genoma_list))
 
             count_final = 0
@@ -229,17 +274,13 @@ class MyGame(arcade.Window):
                     player.kill() 
 
             self.player_tmp = []
+            self.player_tmp.append( self.better )
             for player in self.genoma_list:
-                player.center_x = 150 + random.uniform(1,50)
-                player.center_y = 100
                 self.player_tmp.append( player )
 
-            self.player_tmp.append( self.better )
-            print( 'new players crossover',  len(self.player_list) )    
-
+            print( 'new players crossover',  len(self.player_tmp) )    
 
             print('follow', count_final)
-            print('startnewgame') 
             self.better_count = 0 
             self.startnewgame()                       
 
