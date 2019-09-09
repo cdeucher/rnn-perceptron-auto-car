@@ -1,24 +1,34 @@
 from numpy import exp, array, random, dot
+import random as rand
 import numpy as np
+import copy
+
 import tools as T
 import utils as U
+
 Util   = U.oUtil()
 Tool   = T.oTool()
 
+class copybetter:
+    weights1 = []
+    weights1 = []
+    reward = 0
+    
 class oGenome():
-    #def __init__(self):
+    def __init__(self):
+        self.genome_list = []
 
     def get_better(self, better, player_list):
         if better == None:
             better = player_list[0]            
             better.position  = better.position if len(Tool.read('better.position.txt')) <= 1 else Tool.read('better.position.txt')
             better.weights1  = better.weights1 if len(Tool.read('better.weights1.txt')) <= 1 else Tool.read('better.weights1.txt')
-            better.weights2  = better.weights2 if len(Tool.read('better.weights2.txt')) <= 1 else Tool.read('better.weights2.txt')
+            better.weights1  = better.weights2 if len(Tool.read('better.weights2.txt')) <= 1 else Tool.read('better.weights2.txt')
             better.reward    = 0 if len(Tool.read('better.reward.txt')) <= 1 else Tool.read('better.reward.txt')[0]
 
         #get better 
         for i in range( len(player_list) ):
-            if( (better.position[1] * better.reward) < (player_list[i].position[1] * player_list[i].reward) ):
+            if( better.reward < player_list[i].reward ):
                 print('better',better.position[1], player_list[i].position[1], player_list[i].reward )
                 better = player_list[i]
                 Tool.save('better.position.txt', better.position)
@@ -26,7 +36,12 @@ class oGenome():
                 Tool.save('better.weights1.txt', better.weights1)
                 Tool.save('better.weights2.txt', better.weights2)
 
-        return better        
+        tmp = copybetter()
+        tmp.weights1 = better.weights1
+        tmp.weights2 = better.weights2
+        tmp.reward   = better.reward
+
+        return copy.deepcopy(tmp)        
                 
     def mutate(self, player, better):
         count = 0
@@ -35,7 +50,7 @@ class oGenome():
 
         for i in range( len(player.weights1) ): 
             for x in range( len(player.weights1[i]) ):
-                if random.uniform(0, 1) < 0.9 or better == None:
+                if random.uniform(0, 1) < 0.3 or better == None:
                     if random.uniform(0, 1) > 0.3 and  better != None: #considerar o better no sorteio
                         weights1[i][x] = random.uniform(0, 1) if better.weights1[i][x] > 0.1 else random.uniform(0, 1) -1
                     else:    
@@ -46,7 +61,7 @@ class oGenome():
 
         for i in range( len(player.weights2) ): 
             for x in range( len(player.weights2[i]) ):
-                if random.uniform(0, 1) < 0.9  or better == None:
+                if random.uniform(0, 1) < 0.3  or better == None:
                     if random.uniform(0, 1) > 0.3  and  better != None: #considerar o better no sorteio
                         weights2[i][x] = random.uniform(0, 1) if better.weights2[i][x] > 0.1 else random.uniform(0, 1) -1                    
                     else:    
@@ -55,7 +70,7 @@ class oGenome():
                 else:                    
                         weights2[i][x] = better.weights2[i][x] 
 
-        print('mutations', count)
+        #print('mutations', count)
         return  weights1, weights2
 
     def genome(self, player, better):        
@@ -68,6 +83,84 @@ class oGenome():
                 return 0, 0, False
             else:    
                 return Util.copy(better.weights1), Util.copy(better.weights2), True
+
+    def crossover(self, player_list):
+        count = 0
+        #start sort
+        arr   = sorted(player_list, key=lambda x: x.reward, reverse=True)
+        for i in range(len(arr)) :
+            if arr[i].reward > 0 :
+                tmp = copybetter()
+                tmp.weights1 = arr[i].weights1
+                tmp.weights2 = arr[i].weights2
+                tmp.reward   = arr[i].reward
+                self.genome_list.append( copy.deepcopy( tmp ) )
+
+                count += 1
+                if count <= 20 :
+                   print("Sorted : ", count, arr[i].reward)
+                else :
+                   break
+        return player_list
+        '''
+        #start crossover
+        for x in range(len(self.genome_list)) :
+            #try :
+                for i in range( (len(self.genome_list[x].weights1) -1) ): 
+                    rang = rand.randrange(1, (len( self.genome_list[x].weights1[i] ) -1))
+
+                    print(i,len( self.genome_list[x].weights1[i] ), rang, self.genome_list[x].weights1[i] ) 
+
+                    j = rang  
+                    tmp = []
+                    while j >= 0:
+                       tmp.append(self.genome_list[x].weights1[i][j])
+                       j -= 1
+                       print('did',j)
+                    
+                    j = rang+1
+                    print(i, 'start did',j)
+                    while j < (len( self.genome_list[x].weights1[i]) ) : #crossover com o proximo da fila (x+1)
+                       print(x, 'j',j, len( self.genome_list[x].weights1[i]) )
+                       try :
+                            tmp.append(self.genome_list[ (x+1) ].weights1[i][j])
+                       except IndexError :
+                            tmp.append(self.genome_list[x].weights1[i][j])
+
+                       j += 1                       
+
+                    print(i,rang, tmp ) 
+                    self.genome_list[x].weights1[i] = tmp  # aplica crossover
+
+                ## end weights1
+                for i in range( len(self.genome_list[x].weights2) ): 
+                    rang = rand.randrange(1, (len( self.genome_list[x].weights2[i] ) -1))
+                    j = rang  
+                    tmp = []
+                    while j >= 0:
+                       tmp.append(self.genome_list[x].weights2[i][j])
+                       j -= 1
+                    
+                    j = rang 
+                    while j < (len( self.genome_list[x].weights2[i]) ) : #crossover com o proximo da fila (x+1)
+                       try :
+                            tmp.append(self.genome_list[ (x+1) ].weights2[i][j])
+                       except IndexError :
+                            tmp.append(self.genome_list[x].weights2[i][j])
+
+                       j += 1                       
+                    self.genome_list[x].weights2[i] = tmp  # aplica crossover                      
+                ## end weights2    
+
+            #except IndexError :
+            #    print('IndexError')
+            #    break
+        ## end for              
+        '''
+        return self.genome_list
+        ## end crossover
+
+
 
     def neuron(self, arcade, hidden, action, lines):
         actions = ['top','botton','left','right']
