@@ -29,11 +29,12 @@ SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 #ROBOTs
 MOVEMENT_SPEED = 10
 MAX = 200 if not DEBUG else 1
-MAX_TIME = 10
+MAX_TIME = 40
 
 class copybetter:
     weights1 = []
     weights1 = []
+    position = [0,0]
     reward = 0
 
 class MyGame(arcade.Window):
@@ -91,11 +92,12 @@ class MyGame(arcade.Window):
             self.player_sprite.center_y = 100 
             self.player_sprite.weights1 = Util.copy(self.better.weights1)
             self.player_sprite.weights2 = Util.copy(self.better.weights2) 
-            mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
-            if( mutate ):
-                old = self.player_sprite.weights1
-                self.player_sprite.weights1 = mutation1
-                self.player_sprite.weights2 = mutation2
+            if count > 1 :
+                mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
+                if( mutate ):
+                    old = self.player_sprite.weights1
+                    self.player_sprite.weights1 = mutation1
+                    self.player_sprite.weights2 = mutation2
 
             self.player_sprite.reward   = 0
             self.player_sprite.index    = random.uniform(0, 1)
@@ -116,26 +118,23 @@ class MyGame(arcade.Window):
             self.player_sprite = arcade.Sprite("images/ballon3.png",SPRITE_SCALING)
             self.player_sprite.center_x = 150 + random.uniform(1,50)
             self.player_sprite.center_y = 100
-            #if count < len(self.player_tmp) :
-                #print(count,'self.player_tmp[count]')
-                #print(count,'2 gen', len( self.player_tmp[count].weights1[0] ), len( self.player_tmp[count].weights2[0] ) )
-            self.player_sprite.weights1 = self.player_tmp[count].weights1
-            self.player_sprite.weights2 = self.player_tmp[count].weights2
-            mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
-            if( mutate ):
-                old = self.player_sprite.weights1
-                self.player_sprite.weights1 = mutation1
-                self.player_sprite.weights2 = mutation2 
-                mutations += 1                
-            '''else:                                               
+            if count < len(self.player_tmp) :
+                self.player_sprite.weights1 = self.player_tmp[count].weights1
+                self.player_sprite.weights2 = self.player_tmp[count].weights2
+                mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
+                if( mutate ):
+                    old = self.player_sprite.weights1
+                    self.player_sprite.weights1 = mutation1
+                    self.player_sprite.weights2 = mutation2 
+                    mutations += 1                
+            else:                                               
                 self.player_sprite.weights1 = Util.copy(self.better.weights1)
                 self.player_sprite.weights2 = Util.copy(self.better.weights2) 
                 mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
                 if( mutate ):
                     old = self.player_sprite.weights1
                     self.player_sprite.weights1 = mutation1
-                    self.player_sprite.weights2 = mutation2
-            '''                                       
+                    self.player_sprite.weights2 = mutation2                                    
             #print(np.setdiff1d(old, self.player_sprite.weights1))                  
 
             self.player_sprite.reward   = 0
@@ -260,9 +259,14 @@ class MyGame(arcade.Window):
             #apply crossover
             self.genoma_list = []
             self.genoma_list.append( self.better )
-            while len(self.genoma_list) < MAX and len(self.player_list) > 3 :
+            GEN = True
+            while GEN :
                 tmp = Genome.crossover( self.player_list )                                 
                 self.genoma_list.extend( tmp ) 
+                if len(tmp) > 0 and len(self.genoma_list) < MAX and len(self.player_list) > 3 :
+                    GEN = True
+                else:
+                    GEN = False    
 
             print('end genoma - genoma_list:', len(self.genoma_list))
 

@@ -14,6 +14,7 @@ MAX = 200
 class copybetter:
     weights1 = []
     weights1 = []
+    position = [0,0]
     reward = 0
     
 class oGenome():
@@ -39,7 +40,8 @@ class oGenome():
 
         tmp = copybetter()
         tmp.weights1 = better.weights1
-        tmp.weights2 = better.weights2        
+        tmp.weights2 = better.weights2 
+        tmp.position = better.position       
         tmp.reward   = better.reward
 
         return copy.deepcopy(tmp)        
@@ -75,12 +77,12 @@ class oGenome():
         return  weights1, weights2
 
     def genome(self, player, better):        
-        if random.uniform(0, 1) < 0.5 :
+        if random.uniform(0, 1) < 0.2 :
             #print('genome',player.index)
             weights1, weights2 = self.mutate( player, better ) 
             return weights1, weights2, True
         else:  
-            return Util.copy(player.weights1), Util.copy(player.weights2), True
+            return Util.copy(player.weights1), Util.copy(player.weights2), False
 
     def crossover(self, player_list):
         count = 0
