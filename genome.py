@@ -54,7 +54,7 @@ class oGenome():
         for i in range( len(player.weights1) ): 
             for x in range( len(player.weights1[i]) ):
                 if random.uniform(0, 1) < 0.3 or better == None:
-                    if random.uniform(0, 1) < 0.5 and  better != None: #considerar o better no sorteio
+                    if random.uniform(0, 1) < 0.7 and  better != None: #considerar o better no sorteio
                         weights1[i][x] = better.weights1[i][x]   
                     else:    
                         weights1[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1
@@ -65,7 +65,7 @@ class oGenome():
         for i in range( len(player.weights2) ): 
             for x in range( len(player.weights2[i]) ):
                 if random.uniform(0, 1) < 0.3  or better == None:
-                    if random.uniform(0, 1) < 0.3  and  better != None: #considerar o better no sorteio
+                    if random.uniform(0, 1) < 0.7  and  better != None: #considerar o better no sorteio
                         weights2[i][x] = better.weights2[i][x] 
                     else:    
                         weights2[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1                    
