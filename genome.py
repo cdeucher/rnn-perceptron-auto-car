@@ -47,42 +47,42 @@ class oGenome():
         return copy.deepcopy(tmp)        
                 
     def mutate(self, player, better):
-        count = 0
-        weights1 = random.random((len(player.weights1), len(player.weights1[0]) ))
-        weights2 = random.random((len(player.weights2), len(player.weights2[0]) ))
-
+        weights1 = Util.copy(player.weights1)
+        weights2 = Util.copy(player.weights2)
+        count = 0 
         for i in range( len(player.weights1) ): 
             for x in range( len(player.weights1[i]) ):
-                if random.uniform(0, 1) < 0.3 or better == None:
+                if random.uniform(0, 1) < 0.2 or better == None:
                     if random.uniform(0, 1) < 0.5 and  better != None: #considerar o better no sorteio
-                        weights1[i][x] = better.weights1[i][x]   
+                        weights1[i][x] = better.weights1[i][x] 
+                        #return  weights1, weights2, True 
+                        count += 1 
                     else:    
                         weights1[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1
-                    count += 1                            
-                else:
-                        weights1[i][x] = player.weights1[i][x]    
+                        #return  weights1, weights2, True                            
+                        count += 1
 
         for i in range( len(player.weights2) ): 
             for x in range( len(player.weights2[i]) ):
-                if random.uniform(0, 1) < 0.3  or better == None:
+                if random.uniform(0, 1) < 0.2  or better == None:
                     if random.uniform(0, 1) < 0.5  and  better != None: #considerar o better no sorteio
                         weights2[i][x] = better.weights2[i][x] 
+                        #return  weights1, weights2, True
+                        count += 1
                     else:    
                         weights2[i][x] = random.uniform(0, 1) if random.uniform(0, 1) < 0.5 else random.uniform(0, 1) -1                    
-                    count += 1
-                else:                    
-                    weights2[i][x] = player.weights2[i][x] 
+                        #return  weights1, weights2, True
+                        count += 1
 
-        #print('mutations', count)
-        return  weights1, weights2
+        return  weights1, weights2, count
 
-    def genome(self, player, better):        
-        if random.uniform(0, 1) < 0.2 :
+    def genome(self, player, better, RANGE):        
+        if random.uniform(0, 1) < RANGE :
             #print('genome',player.index)
-            weights1, weights2 = self.mutate( player, better ) 
-            return weights1, weights2, True
+            weights1, weights2, mutate = self.mutate( player, better ) 
+            return weights1, weights2, True, mutate
         else:  
-            return Util.copy(player.weights1), Util.copy(player.weights2), False
+            return Util.copy(player.weights1), Util.copy(player.weights2), 0, False
 
     def crossover(self, player_list):
         count = 0
@@ -106,17 +106,17 @@ class oGenome():
 
         #start crossover
         for x in range(len(self.genome_list)) :
-            #try :
+            if random.uniform(0, 1) < 0.5 :
                 for i in range( (len(self.genome_list[x].weights1) -1) ): 
                     rang = rand.randrange(1, (len( self.genome_list[x].weights1[i] ) -1))
 
                     #print(i,len( self.genome_list[x].weights1[i] ), rang, self.genome_list[x].weights1[i] ) 
 
-                    j = rang  
+                    j = 0 
                     tmp = []
-                    while j >= 0:
+                    while j <= rang:
                        tmp.append(self.genome_list[x].weights1[i][j])
-                       j -= 1
+                       j += 1
                        #print('did',j)
                     
                     j = rang+1
@@ -132,15 +132,15 @@ class oGenome():
 
                     #print(i,rang, tmp ) 
                     self.genome_list[x].weights1[i] = tmp  # aplica crossover
-
+            else :
                 ## end weights1
                 for i in range( len(self.genome_list[x].weights2) ): 
                     rang = rand.randrange(1, (len( self.genome_list[x].weights2[i] ) -1))
-                    j = rang  
+                    j = 0 
                     tmp = []
-                    while j >= 0:
+                    while j <= rang:
                        tmp.append(self.genome_list[x].weights2[i][j])
-                       j -= 1
+                       j += 1
                     
                     j = rang+1 
                     while j < (len( self.genome_list[x].weights2[i]) ) : #crossover com o proximo da fila (x+1)
@@ -150,12 +150,11 @@ class oGenome():
                             tmp.append(self.genome_list[x].weights2[i][j])
 
                        j += 1                       
-                    self.genome_list[x].weights2[i] = tmp  # aplica crossover                      
+                    self.genome_list[x].weights2[i] = tmp  # aplica crossover  
+
                 ## end weights2    
 
-            #except IndexError :
-            #    print('IndexError')
-            #    break
+            #end if
         ## end for              
 
         return self.genome_list

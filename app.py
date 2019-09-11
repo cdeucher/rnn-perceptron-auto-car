@@ -29,7 +29,6 @@ SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 #ROBOTs
 MOVEMENT_SPEED = 10
 MAX = 200 if not DEBUG else 1
-MAX_TIME = 40
 
 class copybetter:
     weights1 = []
@@ -43,11 +42,12 @@ class MyGame(arcade.Window):
     def __init__(self, width, height, title):
         """
         Initializer
-        """
+        """        
         super().__init__(width, height, title)
         file_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(file_path)
 
+        self.MAX_TIME = 10
         # Sprite lists
         self.wall_list = None
         self.player_list = None
@@ -92,8 +92,8 @@ class MyGame(arcade.Window):
             self.player_sprite.center_y = 100 
             self.player_sprite.weights1 = Util.copy(self.better.weights1)
             self.player_sprite.weights2 = Util.copy(self.better.weights2) 
-            if count > 2 :
-                mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
+            if count > 1 :
+                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.9)
                 if( mutate ):
                     old = self.player_sprite.weights1
                     self.player_sprite.weights1 = mutation1
@@ -121,20 +121,21 @@ class MyGame(arcade.Window):
             if count < len(self.player_tmp) :
                 self.player_sprite.weights1 = self.player_tmp[count].weights1
                 self.player_sprite.weights2 = self.player_tmp[count].weights2
-                mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
+                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.4)
                 if( mutate ):
                     old = self.player_sprite.weights1
                     self.player_sprite.weights1 = mutation1
                     self.player_sprite.weights2 = mutation2 
-                    mutations += 1                
+                    mutations += mutcount                
             else:                                               
                 self.player_sprite.weights1 = Util.copy(self.better.weights1)
                 self.player_sprite.weights2 = Util.copy(self.better.weights2) 
-                mutation1, mutation2, mutate = Genome.genome(self.player_sprite, self.better)
+                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.07)
                 if( mutate ):
                     old = self.player_sprite.weights1
                     self.player_sprite.weights1 = mutation1
-                    self.player_sprite.weights2 = mutation2                                    
+                    self.player_sprite.weights2 = mutation2    
+                    mutations += mutcount                                 
             #print(np.setdiff1d(old, self.player_sprite.weights1))                  
 
             self.player_sprite.reward   = 0
@@ -182,6 +183,7 @@ class MyGame(arcade.Window):
         self.player_list.draw()
 
         # score
+        arcade.draw_text(f"Max Time: {self.MAX_TIME}",50, 610,arcade.csscolor.WHITE, 10)
         arcade.draw_text(f"Time: {self.score}", 50, 630,arcade.csscolor.WHITE, 10)
         arcade.draw_text(f"Generations: {self.generations}", 50, 620,arcade.csscolor.WHITE, 10)        
  
@@ -251,7 +253,7 @@ class MyGame(arcade.Window):
             if not DEBUG :                 
                 Util.action_reliase(player,action)           
             
-        if(self.score > MAX_TIME) :
+        if(self.score > self.MAX_TIME) :
             self.score_timeout = 0
             print('---------   MAX_TIME OVER --------')
             print('start genoma - player_list:', len(self.player_list))
@@ -291,8 +293,10 @@ class MyGame(arcade.Window):
     def on_key_press(self, key, modifiers):
         if key == arcade.key.UP:
             self.player_list[0].change_y = MOVEMENT_SPEED
+            self.MAX_TIME += 10
         elif key == arcade.key.DOWN:
             self.player_list[0].change_y = -MOVEMENT_SPEED
+            self.MAX_TIME -= 10
         elif key == arcade.key.LEFT:
             self.player_list[0].change_x = -MOVEMENT_SPEED
         elif key == arcade.key.RIGHT:
