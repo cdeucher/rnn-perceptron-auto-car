@@ -106,53 +106,51 @@ class oGenome():
 
         #start crossover
         for x in range(len(self.genome_list)) :
-            if random.uniform(0, 1) < 0.5 :
-                for i in range( (len(self.genome_list[x].weights1) -1) ): 
-                    rang = rand.randrange(1, (len( self.genome_list[x].weights1[i] ) -1))
+            for i in range( (len(self.genome_list[x].weights1) -1) ): 
+                rang = rand.randrange(1, (len( self.genome_list[x].weights1[i] ) -1))
 
-                    #print(i,len( self.genome_list[x].weights1[i] ), rang, self.genome_list[x].weights1[i] ) 
+                #print(i,len( self.genome_list[x].weights1[i] ), rang, self.genome_list[x].weights1[i] ) 
 
-                    j = 0 
-                    tmp = []
-                    while j <= rang:
-                       tmp.append(self.genome_list[x].weights1[i][j])
-                       j += 1
-                       #print('did',j)
-                    
-                    j = rang+1
-                    #print(i, 'start did',j)
-                    while j < (len( self.genome_list[x].weights1[i]) ) : #crossover com o proximo da fila (x+1)
-                       #print(x, 'j',j, len( self.genome_list[x].weights1[i]) )
-                       try :
-                            tmp.append(self.genome_list[ (x+1) ].weights1[i][j])
-                       except IndexError :
-                            tmp.append(self.genome_list[x].weights1[i][j])
+                j = 0 
+                tmp = []
+                while j <= rang:
+                    tmp.append(self.genome_list[x].weights1[i][j])
+                    j += 1
+                    #print('did',j)
+                
+                j = rang+1
+                #print(i, 'start did',j)
+                while j < (len( self.genome_list[x].weights1[i]) ) : #crossover com o proximo da fila (x+1)
+                    #print(x, 'j',j, len( self.genome_list[x].weights1[i]) )
+                    try :
+                        tmp.append(self.genome_list[ (x+1) ].weights1[i][j])
+                    except IndexError :
+                        tmp.append(self.genome_list[x].weights1[i][j])
 
-                       j += 1                       
+                    j += 1                       
 
-                    #print(i,rang, tmp ) 
-                    self.genome_list[x].weights1[i] = tmp  # aplica crossover
-            else :
-                ## end weights1
-                for i in range( len(self.genome_list[x].weights2) ): 
-                    rang = rand.randrange(1, (len( self.genome_list[x].weights2[i] ) -1))
-                    j = 0 
-                    tmp = []
-                    while j <= rang:
-                       tmp.append(self.genome_list[x].weights2[i][j])
-                       j += 1
-                    
-                    j = rang+1 
-                    while j < (len( self.genome_list[x].weights2[i]) ) : #crossover com o proximo da fila (x+1)
-                       try :
-                            tmp.append(self.genome_list[ (x+1) ].weights2[i][j])
-                       except IndexError :
-                            tmp.append(self.genome_list[x].weights2[i][j])
+                #print(i,rang, tmp ) 
+                self.genome_list[x].weights1[i] = tmp  # aplica crossover
+            ## end weights1
+            for i in range( len(self.genome_list[x].weights2) ): 
+                rang = rand.randrange(1, (len( self.genome_list[x].weights2[i] ) -1))
+                j = 0 
+                tmp = []
+                while j <= rang:
+                    tmp.append(self.genome_list[x].weights2[i][j])
+                    j += 1
+                
+                j = rang+1 
+                while j < (len( self.genome_list[x].weights2[i]) ) : #crossover com o proximo da fila (x+1)
+                    try :
+                        tmp.append(self.genome_list[ (x+1) ].weights2[i][j])
+                    except IndexError :
+                        tmp.append(self.genome_list[x].weights2[i][j])
 
-                       j += 1                       
-                    self.genome_list[x].weights2[i] = tmp  # aplica crossover  
+                    j += 1                       
+                self.genome_list[x].weights2[i] = tmp  # aplica crossover  
 
-                ## end weights2    
+            ## end weights2    
 
             #end if
         ## end for              

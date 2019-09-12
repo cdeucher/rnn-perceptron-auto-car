@@ -121,7 +121,7 @@ class MyGame(arcade.Window):
             if count < len(self.player_tmp) :
                 self.player_sprite.weights1 = self.player_tmp[count].weights1
                 self.player_sprite.weights2 = self.player_tmp[count].weights2
-                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.4)
+                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.6)
                 if( mutate ):
                     old = self.player_sprite.weights1
                     self.player_sprite.weights1 = mutation1
@@ -130,7 +130,7 @@ class MyGame(arcade.Window):
             else:                                               
                 self.player_sprite.weights1 = Util.copy(self.better.weights1)
                 self.player_sprite.weights2 = Util.copy(self.better.weights2) 
-                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.07)
+                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.2)
                 if( mutate ):
                     old = self.player_sprite.weights1
                     self.player_sprite.weights1 = mutation1
@@ -175,33 +175,32 @@ class MyGame(arcade.Window):
         arcade.set_background_color(arcade.color.AMAZON)
 
     def on_draw(self):
-        # This command has to happen before we start drawing
-        arcade.start_render()
+            arcade.start_render()
 
-        # Draw all the sprites.
-        self.wall_list.draw()
-        self.player_list.draw()
+            # Draw all the sprites.
+            self.wall_list.draw()
+            self.player_list.draw()
 
-        # score
-        arcade.draw_text(f"Max Time: {self.MAX_TIME}",50, 610,arcade.csscolor.WHITE, 10)
-        arcade.draw_text(f"Time: {self.score}", 50, 630,arcade.csscolor.WHITE, 10)
-        arcade.draw_text(f"Generations: {self.generations}", 50, 620,arcade.csscolor.WHITE, 10)        
- 
-        Genome.neuron(arcade, self.neuron_action[0], self.neuron_action[1], self.lines_action) 
+            # score
+            arcade.draw_text(f"Max Time: {self.MAX_TIME}",50, 610,arcade.csscolor.WHITE, 10)
+            arcade.draw_text(f"Time: {self.score}", 50, 630,arcade.csscolor.WHITE, 10)
+            arcade.draw_text(f"Generations: {self.generations}", 50, 620,arcade.csscolor.WHITE, 10)        
+    
+            Genome.neuron(arcade, self.neuron_action[0], self.neuron_action[1], self.lines_action) 
 
-        #if DEBUG :
-        #    arcade.draw_text(f"right: {self.right} left: {self.left}", 50, 580,arcade.csscolor.WHITE, 10) 
-        #    arcade.draw_text(f"top: {self.top} botton: {self.botton}", 50, 570,arcade.csscolor.WHITE, 10) 
-                    
-        #    arcade.draw_text(f"top-right:{self.grid[ self.top ][ self.right ]} botton-right:{self.grid[ self.botton ][ self.right ]}", 50, 500,arcade.csscolor.WHITE, 10) 
-        #    arcade.draw_text(f"top-left: {self.grid[ self.top ][ self.left ]}  botton-left: {self.grid[ self.botton ][ self.left ]}", 50, 490,arcade.csscolor.WHITE, 10) 
-       
-        for player in self.player_list:                
-            #arcade.draw_text(f"top",    player.position[0],    player.position[1]+25, arcade.csscolor.WHITE, 10) 
-            #arcade.draw_text(f"botton", player.position[0],    player.position[1]-30, arcade.csscolor.WHITE, 10)
-            #arcade.draw_text(f"right",  player.position[0]+20, player.position[1], arcade.csscolor.WHITE, 10) 
-            #arcade.draw_text(f"left",   player.position[0]-25, player.position[1], arcade.csscolor.WHITE, 10)                
-            arcade.draw_text(f"R: {player.reward}", player.position[0],    player.position[1]+40 ,arcade.csscolor.WHITE, 10) 
+            #if DEBUG :
+            #    arcade.draw_text(f"right: {self.right} left: {self.left}", 50, 580,arcade.csscolor.WHITE, 10) 
+            #    arcade.draw_text(f"top: {self.top} botton: {self.botton}", 50, 570,arcade.csscolor.WHITE, 10) 
+                        
+            #    arcade.draw_text(f"top-right:{self.grid[ self.top ][ self.right ]} botton-right:{self.grid[ self.botton ][ self.right ]}", 50, 500,arcade.csscolor.WHITE, 10) 
+            #    arcade.draw_text(f"top-left: {self.grid[ self.top ][ self.left ]}  botton-left: {self.grid[ self.botton ][ self.left ]}", 50, 490,arcade.csscolor.WHITE, 10) 
+        
+            for player in self.player_list:                
+                #arcade.draw_text(f"top",    player.position[0],    player.position[1]+25, arcade.csscolor.WHITE, 10) 
+                #arcade.draw_text(f"botton", player.position[0],    player.position[1]-30, arcade.csscolor.WHITE, 10)
+                #arcade.draw_text(f"right",  player.position[0]+20, player.position[1], arcade.csscolor.WHITE, 10) 
+                #arcade.draw_text(f"left",   player.position[0]-25, player.position[1], arcade.csscolor.WHITE, 10)                
+                arcade.draw_text(f"R: {player.reward}", player.position[0],    player.position[1]+40 ,arcade.csscolor.WHITE, 10) 
            
 
     def update(self, delta_time):
