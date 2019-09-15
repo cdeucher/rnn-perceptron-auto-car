@@ -36,14 +36,14 @@ class oUtil():
                         [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1],
                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+                        [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                         [1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1],
+                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 1],
                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
                         [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -67,17 +67,17 @@ class oUtil():
                         [11,12,12,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,15,15,15,15,15,15,15,15,15,15],
                         [11,12,13,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,15,15,15,15,15,16,16,16,15,15],
                         [11,12,13,13,13,13,13,13,13,13,13,13,13,13,14,14,14,14,14,14,15,15,15,15,15,16,16,16,15,15],
-                        [18,18,18,18,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,16,16,16,16],
+                        [17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,16,16,16,16],
                         [18,18,18,18,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,16,16,16,16],
                         [18,18,18,18,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,16,16,16],
                         [18,18,18,18,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,16,16],
                         [18,18,18,18,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,16,16],
                         [18,19,19,18,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,17,16,16],
                         [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21],
-                        [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21],
-                        [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21],
-                        [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21],
-                        [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21],
+                        [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,20,21,21,21,21],
+                        [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21],
+                        [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21],
+                        [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,21,21,21,21,21,21],
                         [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,21,22,22,22,22]] 
         #self.image2pixelarray('images/map.png')                  
 
@@ -137,10 +137,11 @@ class oUtil():
         ##girar o sensor
         angle = player.angle# * -1 if player.angle < 0 else player.angle   
 
-        if angle < 0 and angle > -180 :
+        if angle < 0 and angle > -181 :
             player.location_side = 1
             player.location_angle = 1
-            if (angle <= 0 and angle > -75): #top
+
+            if (angle <= 0 and angle > -81): #top -75
                 player.location_angle = 0
             elif (angle < -100 and angle > -180): #botton  
                 player.location_angle = 2
@@ -149,9 +150,10 @@ class oUtil():
             player.location_side = 2
             player.location_angle = 1
             if (angle > 0 ): #top
-                if (angle < 70): #top
+                target_angle = 40 if player.line_botton > 150 else 85
+                if (angle < target_angle): #top 55
                     player.location_angle = 0
-            if (angle < -180 and angle > -245): #botton 
+            if (angle < -180 and angle > -255): #botton 
                 player.location_angle = 2
 
        
@@ -159,7 +161,8 @@ class oUtil():
             line_top    = self.check_wall_top( self.grid, top, left )
             line_botton = self.check_wall_botton( self.grid, botton, left )
             line_left   = self.check_wall_left( self.grid, left, botton )
-            line_right  = self.check_wall_right( self.grid, right, botton )            
+            line_right  = self.check_wall_right( self.grid, right, botton )     
+
             if player.location_angle == 0: #top
                 line_top    = self.check_wall_left( self.grid, left, botton )
                 line_botton = self.check_wall_right( self.grid, right, botton )
@@ -171,10 +174,11 @@ class oUtil():
                 line_left   = self.check_wall_top( self.grid, top, left )
                 line_right  = self.check_wall_botton( self.grid, botton, left )
         else:
-            line_top    = self.check_wall_top( self.grid, top, left )          
-            line_botton = self.check_wall_botton( self.grid, botton, left )
+            line_top    = self.check_wall_botton( self.grid, botton, left )          
+            line_botton = self.check_wall_top( self.grid, top, left )
             line_left   = self.check_wall_right( self.grid, right, botton )
             line_right  = self.check_wall_left( self.grid, left, botton )
+
             if player.location_angle == 0 : #top
                 line_top    = self.check_wall_left( self.grid, left, botton )
                 line_botton = self.check_wall_right( self.grid, right, botton )
@@ -189,10 +193,9 @@ class oUtil():
         player.line_top     = line_top
         player.line_botton  = line_botton
         player.line_left    = line_left
-        player.line_right   = line_right  
+        player.line_right   = line_right 
 
-        return line_top, line_botton, line_left, line_right         
-
+        return line_top, line_botton, line_left, line_right        
 
     def check_wall_top(self, grid, top, left):
         WALL  = True
@@ -204,7 +207,7 @@ class oUtil():
             else :
                 count += 1
                 index += 1
-        return  count * HEIGHT
+        return  count * HEIGHT    
 
     def check_wall_botton(self, grid, botton, left):
         WALL  = True

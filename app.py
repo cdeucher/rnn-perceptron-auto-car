@@ -13,7 +13,7 @@ Util   = U.oUtil()
 Genome = GE.oGenome()
 Tool   = T.oTool()
 
-DEBUG = True
+DEBUG = False
 SPRITE_SCALING = 0.5
 GRAVITY = 0
 SCREEN_TITLE = "RNN + Genetic algorithm"
@@ -29,7 +29,7 @@ SCREEN_HEIGHT = (HEIGHT + MARGIN) * ROW_COUNT + MARGIN
 
 #ROBOTs
 MOVEMENT_SPEED = 5
-MAX = 200 if not DEBUG else 1
+MAX = 300 if not DEBUG else 1
 
 class copybetter:
     weights1 = []
@@ -49,6 +49,7 @@ class Player(arcade.Sprite):
         self.center_y = 100 + random.uniform(1,10)  
         self.stop     = 0   
         self.angle    = -90  
+        self.line_botton = 0
 
 
     def update(self):
@@ -139,7 +140,7 @@ class MyGame(arcade.Window):
             if count < (len(self.player_tmp) -1) :
                 self.player_sprite.weights1 = self.player_tmp[count].weights1
                 self.player_sprite.weights2 = self.player_tmp[count].weights2
-                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.3)
+                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.4)
                 if( mutate ):
                     old = self.player_sprite.weights1
                     self.player_sprite.weights1 = mutation1
@@ -201,8 +202,8 @@ class MyGame(arcade.Window):
             Genome.neuron(arcade, self.neuron_action[0], self.neuron_action[1], self.lines_action) 
 
             if DEBUG :
-                arcade.draw_text(f"right: {self.player_list[0].rightx} left: {self.player_list[0].leftx}", 50, 450,arcade.csscolor.WHITE, 10) 
-                arcade.draw_text(f"top: {self.player_list[0].topx} botton: {self.player_list[0].bottonx}", 50, 440,arcade.csscolor.WHITE, 10)                         
+                arcade.draw_text(f"right: {self.player_list[0].rightx} left: {self.player_list[0].leftx}", 50, 440,arcade.csscolor.WHITE, 10) 
+                arcade.draw_text(f"top: {self.player_list[0].topx} botton: {self.player_list[0].bottonx}", 50, 430,arcade.csscolor.WHITE, 10)                         
                 
                 arcade.draw_text(f"line_top:{self.player_list[0].line_top} line_botton:{self.player_list[0].line_botton}", 50, 470,arcade.csscolor.WHITE, 10) 
                 arcade.draw_text(f"line_left: {self.player_list[0].line_left} line_right: {self.player_list[0].line_right}", 50, 460,arcade.csscolor.WHITE, 10) 
@@ -218,11 +219,10 @@ class MyGame(arcade.Window):
                 #arcade.draw_text(f"botton", player.position[0],    player.position[1]-30, arcade.csscolor.WHITE, 10)
                 #arcade.draw_text(f"right",  player.position[0]+20, player.position[1], arcade.csscolor.WHITE, 10) 
                 #arcade.draw_text(f"left",   player.position[0]-25, player.position[1], arcade.csscolor.WHITE, 10)                
-                #{str(player.reward)[:4]} 
-                arcade.draw_text(f"R: {str(player.angle)}  {str(player.location_side)} {player.location_angle}", player.position[0],    player.position[1]+40 ,arcade.csscolor.WHITE, 10) 
-
+ 
                 if(player.index == self.index) :
                     self.draw_debug(player)
+                    arcade.draw_text(f"R: {str(player.reward)[:4]} {str(player.angle)}  {str(player.location_side)} {player.location_angle}", player.position[0],    player.position[1]+40 ,arcade.csscolor.WHITE, 10) 
 
     def draw_debug(self, player):
         xx = player.position[0]
@@ -231,44 +231,35 @@ class MyGame(arcade.Window):
         try :
             if player.location_side == 1 :
                 if player.location_angle == 0 :
-                    front = yy+player.line_right 
-                    back  = xx+player.line_botton                        
-                    arcade.draw_line(xx, yy, xx, front, arcade.color.WOOD_BROWN, 3) 
-                    #arcade.draw_line(xx, yy, xx, -back, arcade.color.WOOD_BROWN, 3)
+                    front = yy+player.line_right                       
+                    arcade.draw_line(xx, yy, xx, front, arcade.color.WOOD_BROWN, 3)                     
 
                 elif player.location_angle == 1 :
-                    front = xx+player.line_right 
-                    back  = xx+player.line_botton                        
+                    front = xx+player.line_right                   
                     arcade.draw_line(xx, yy, front, yy, arcade.color.WOOD_BROWN, 3) 
-                    #arcade.draw_line(xx, yy, -back, yy, arcade.color.WOOD_BROWN, 3)
 
                 elif player.location_angle == 2 :
-                    front = yy-player.line_right 
-                    back  = yy+player.line_botton                      
+                    front = yy-player.line_right                    
                     arcade.draw_line(xx, yy, xx, front, arcade.color.WOOD_BROWN, 3) 
-                    #arcade.draw_line(xx, yy, xx, back, arcade.color.WOOD_BROWN, 3)
 
             elif player.location_side == 2 :   
                 if player.location_angle == 0 :
-                    front = yy+player.line_right 
-                    back  = xx+player.line_botton                        
+                    front = yy+player.line_right                       
                     arcade.draw_line(xx, yy, xx, front, arcade.color.WOOD_BROWN, 3) 
 
                 elif player.location_angle == 1 :
-                    front = xx+player.line_right 
-                    back  = xx+player.line_botton                                        
+                    front = xx+player.line_right                                      
                     arcade.draw_line(xx, yy, -front, yy, arcade.color.WOOD_BROWN, 3) 
 
                 elif player.location_angle == 2 :
-                    front = yy-player.line_right 
-                    back  = yy+player.line_botton                      
+                    front = yy-player.line_right                    
                     arcade.draw_line(xx, yy, xx, front, arcade.color.WOOD_BROWN, 3)              
 
 
         except ZeroDivisionError:
             arcade.draw_line(xx, yy, 0, yy, arcade.color.WOOD_BROWN, 3)  
 
-        return  front, back   
+        return  front, 0   
 
            
     def kill(self, player):

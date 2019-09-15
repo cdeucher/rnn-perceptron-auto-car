@@ -162,7 +162,7 @@ class oGenome():
 
     def neuron(self, arcade, hidden, action, lines):
         action_reliase = ['top','botton','speed','break']
-        lines_action = ['line_top', 'line_botton', 'line_left', 'line_right']
+        lines_action = ['line_top', 'line_botton', 'line_left', 'line_right', 'line_top_botton']
         for i in range(6) :
             if i == hidden :
                 arcade.draw_text(f"(x)", 250, 500+(i*15),arcade.csscolor.WHITE, 12) 
@@ -175,6 +175,7 @@ class oGenome():
             else:
                 arcade.draw_text(f"( ) {action_reliase[i]}", 280, 500+(i*15),arcade.csscolor.WHITE, 12)  
 
+        for i in range(len(lines)) :
             arcade.draw_text(f"{lines_action[i]}:{lines[i]}", 150, 500+(i*15),arcade.csscolor.WHITE, 10) 
 
                                     
