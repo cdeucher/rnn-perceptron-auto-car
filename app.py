@@ -19,7 +19,7 @@ GRAVITY = 0
 SCREEN_TITLE = "RNN + Genetic algorithm"
 
 # GRIDE
-ROW_COUNT = 30
+ROW_COUNT = 31
 COLUMN_COUNT = 30
 WIDTH = 30
 HEIGHT = 30
@@ -110,11 +110,11 @@ class MyGame(arcade.Window):
         self.generations += 1
         count = 0
         while len(self.player_list) < MAX:         
-            car_number = int(random.uniform(0,3))    
+            car_number = int(random.uniform(0,4))    
             self.player_sprite = Player("images/car"+str(car_number)+".png",SPRITE_SCALING)
             self.player_sprite.weights1 = Util.copy(self.better.weights1)
             self.player_sprite.weights2 = Util.copy(self.better.weights2) 
-            if count > 1 :
+            if count > 10 :
                 mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.9)
                 if( mutate ):
                     old = self.player_sprite.weights1
@@ -135,12 +135,12 @@ class MyGame(arcade.Window):
         print( 'new players tmp/list',  len(self.player_tmp) ,len(self.player_list) )
         count = 0
         while len(self.player_list) < MAX:         
-            car_number = int(random.uniform(0,3))     
+            car_number = int(random.uniform(0,4))     
             self.player_sprite = Player("images/car"+str(car_number)+".png",SPRITE_SCALING)
             if count < (len(self.player_tmp) -1) :
                 self.player_sprite.weights1 = self.player_tmp[count].weights1
                 self.player_sprite.weights2 = self.player_tmp[count].weights2
-                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.4)
+                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.2)
                 if( mutate ):
                     old = self.player_sprite.weights1
                     self.player_sprite.weights1 = mutation1
