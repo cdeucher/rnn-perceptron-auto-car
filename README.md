@@ -1,6 +1,8 @@
 # Perceptron Car
 
-Neural network teaches the car to drive
+Neural network teaches the car to drive 
+
+Use genome algorithm with RNN
 
 ![alt text](https://github.com/ryanface/rnn_perceptron_auto_car/blob/master/game.png)
 
