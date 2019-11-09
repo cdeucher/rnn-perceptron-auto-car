@@ -1,0 +1,6 @@
+arcade
+math
+numpy
+copy
+random
+PIL
