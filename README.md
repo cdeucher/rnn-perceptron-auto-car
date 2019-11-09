@@ -9,7 +9,7 @@ Use genome algorithm with RNN
 
 ## Getting Started
 
-Run: ./app.py
+Run: Python app.py
 
 ### Prerequisites
 
@@ -23,7 +23,7 @@ Python
 
 ```
 pip install -r requirements
-./app.py
+Python app.py
 ```
 
 ## Authors

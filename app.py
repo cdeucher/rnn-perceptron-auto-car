@@ -13,7 +13,7 @@ Util   = U.oUtil()
 Genome = GE.oGenome()
 Tool   = T.oTool()
 
-DEBUG = False
+DEBUG = True
 SPRITE_SCALING = 0.5
 GRAVITY = 0
 SCREEN_TITLE = "RNN + Genetic algorithm"
