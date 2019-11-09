@@ -140,7 +140,7 @@ class MyGame(arcade.Window):
             if count < (len(self.player_tmp) -1) :
                 self.player_sprite.weights1 = self.player_tmp[count].weights1
                 self.player_sprite.weights2 = self.player_tmp[count].weights2
-                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.2)
+                mutation1, mutation2, mutate, mutcount = Genome.genome(self.player_sprite, self.better, 0.6)
                 if( mutate ):
                     old = self.player_sprite.weights1
                     self.player_sprite.weights1 = mutation1

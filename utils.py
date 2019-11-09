@@ -82,28 +82,6 @@ class oUtil():
                         [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,22,22,22,22,22,22,22,22],
                         [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,22,22,22,22,22,22,22,22],
                         [19,19,19,19,19,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,20,22,22,22,22,22,22,22,22]] 
-        #self.image2pixelarray('images/map.png')                  
-
-    def image2pixelarray(self,filepath):
-        """
-        Parameters
-        ----------
-        filepath : str
-            Path to an image file
-
-        Returns
-        -------
-        list
-            A list of lists which make it simple to access the greyscale value by
-            im[y][x]
-        """
-        im = img.open(filepath).convert('L')
-        (width, height) = im.size
-        greyscale_map = list(im.getdata())
-        greyscale_map = np.array(greyscale_map)
-        greyscale_map = greyscale_map.reshape((height, width))
-        print(greyscale_map)
-        return greyscale_map   
 
     def action_reliase(self, player, action):
         player.change_angle = 0 
