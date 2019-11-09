@@ -2,7 +2,7 @@
 
 Neural network teaches the car to drive
 
-![alt text](https://github.com/ryanface/rnn_perceptron_py/blob/master/game.png)
+![alt text](https://github.com/ryanface/rnn_perceptron_auto_car/blob/master/game.png)
 
 
 ## Getting Started
@@ -26,9 +26,9 @@ pip install -r requirements
 
 ## Authors
 
-* **C.A.B.D** - *Initial work* - (https://github.com/ryanface/rnn_perceptron_py.git)
+* **C.A.B.D** - *Initial work* - (https://github.com/ryanface/rnn_perceptron_auto_car.git)
 
-See also the list of [contributors](https://github.com/ryanface/rnn_perceptron_py.git) who participated in this project.
+See also the list of [contributors](https://github.com/ryanface/rnn_perceptron_auto_car.git) who participated in this project.
 
 ## License
 
