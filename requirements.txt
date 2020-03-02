@@ -1,6 +1,3 @@
-arcade
-math
-numpy
-copy
-random
-PIL
+arcade>=2.3.7
+numpy>=1.18.1
+Pillow>=2.2.2
